@@ -190,6 +190,16 @@
       </div>
 
       <div class="input-group">
+        <label>LinkedIn</label>
+        <input type="text" id="linkedin" placeholder="linkedin.com/in/seuperfil" />
+      </div>
+
+      <div class="input-group">
+        <label>GitHub</label>
+        <input type="text" id="github" placeholder="github.com/seuusuario" />
+      </div>
+
+      <div class="input-group">
         <label>Telefone</label>
         <input type="text" id="phone" placeholder="(00) 00000-0000" />
       </div>
@@ -210,12 +220,24 @@
       </div>
 
       <div class="input-group">
+        <label>Modelo do Currículo</label>
+        <select id="template">
+          <option value="modern">Moderno</option>
+          <option value="minimal">Minimalista</option>
+          <option value="corporate">Corporativo</option>
+        </select>
+      </div>
+
+      <div class="input-group">
         <label>Cor Principal</label>
         <select id="themeColor">
           <option value="#6366f1">Roxo</option>
           <option value="#0f172a">Preto</option>
           <option value="#0ea5e9">Azul</option>
           <option value="#16a34a">Verde</option>
+          <option value="#ef4444">Vermelho</option>
+          <option value="#f59e0b">Laranja</option>
+          <option value="#ec4899">Rosa</option>
         </select>
       </div>
 
@@ -245,6 +267,8 @@
             <h2>Contato</h2>
             <p id="previewEmail">email@gmail.com</p>
             <p id="previewPhone">(00) 00000-0000</p>
+            <p id="previewLinkedin">linkedin.com/in/seuperfil</p>
+            <p id="previewGithub">github.com/seuusuario</p>
           </div>
 
           <div class="section">
@@ -278,6 +302,8 @@
 
   <script>
     const inputs = {
+      linkedin: document.getElementById('linkedin'),
+      github: document.getElementById('github'),
       name: document.getElementById('name'),
       role: document.getElementById('role'),
       email: document.getElementById('email'),
@@ -293,10 +319,25 @@
       document.getElementById('previewRole').innerText = inputs.role.value || 'Seu Cargo';
       document.getElementById('previewEmail').innerText = inputs.email.value || 'email@gmail.com';
       document.getElementById('previewPhone').innerText = inputs.phone.value || '(00) 00000-0000';
+      document.getElementById('previewLinkedin').innerText = inputs.linkedin.value || 'linkedin.com/in/seuperfil';
+      document.getElementById('previewGithub').innerText = inputs.github.value || 'github.com/seuusuario';
       document.getElementById('previewAbout').innerText = inputs.about.value || 'Escreva um resumo profissional moderno e objetivo.';
       document.getElementById('previewExperience').innerText = inputs.experience.value || 'Suas experiências aparecerão aqui.';
 
       document.getElementById('cvHeader').style.background = inputs.themeColor.value;
+
+      const cv = document.getElementById('cv');
+
+      if(inputs.template.value === 'minimal') {
+        cv.style.borderRadius = '0px';
+        cv.style.boxShadow = 'none';
+      } else if(inputs.template.value === 'corporate') {
+        cv.style.borderRadius = '8px';
+        cv.style.boxShadow = '0 0 30px rgba(0,0,0,0.1)';
+      } else {
+        cv.style.borderRadius = '18px';
+        cv.style.boxShadow = '0 10px 30px rgba(0,0,0,0.2)';
+      }
 
       const skillsContainer = document.getElementById('previewSkills');
       skillsContainer.innerHTML = '';
@@ -341,24 +382,26 @@
       doc.setFontSize(12);
       doc.text('Email: ' + (inputs.email.value || ''), 20, 50);
       doc.text('Telefone: ' + (inputs.phone.value || ''), 20, 60);
+      doc.text('LinkedIn: ' + (inputs.linkedin.value || ''), 20, 70);
+      doc.text('GitHub: ' + (inputs.github.value || ''), 20, 80);
 
       doc.setFontSize(15);
-      doc.text('Resumo Profissional', 20, 80);
+      doc.text('Resumo Profissional', 20, 100);
 
       doc.setFontSize(11);
-      doc.text(doc.splitTextToSize(inputs.about.value || '', 170), 20, 90);
+      doc.text(doc.splitTextToSize(inputs.about.value || '', 170), 20, 110);
 
       doc.setFontSize(15);
-      doc.text('Experiência', 20, 130);
+      doc.text('Experiência', 20, 150);
 
       doc.setFontSize(11);
-      doc.text(doc.splitTextToSize(inputs.experience.value || '', 170), 20, 140);
+      doc.text(doc.splitTextToSize(inputs.experience.value || '', 170), 20, 160);
 
       doc.setFontSize(15);
-      doc.text('Habilidades', 20, 190);
+      doc.text('Habilidades', 20, 210);
 
       doc.setFontSize(11);
-      doc.text(inputs.skills.value || '', 20, 200);
+      doc.text(inputs.skills.value || '', 20, 220);
 
       doc.save('curriculo-profissional.pdf');
     }
@@ -378,3 +421,4 @@
 
 </body>
 </html>
+
