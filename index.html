@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV Builder Pro</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1400px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .editor,
+    .preview {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #94a3b8;
+      margin-bottom: 30px;
+    }
+
+    .input-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.08);
+      color: white;
+      outline: none;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    button {
+      flex: 1;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .download {
+      background: linear-gradient(135deg, #8b5cf6, #6366f1);
+      color: white;
+    }
+
+    .clear {
+      background: #1e293b;
+      color: white;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+    }
+
+    .cv {
+      background: white;
+      color: #111827;
+      border-radius: 18px;
+      overflow: hidden;
+      min-height: 800px;
+    }
+
+    .cv-header {
+      padding: 35px;
+      color: white;
+      text-align: center;
+    }
+
+    .cv-header img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
+      border: 4px solid white;
+    }
+
+    .cv-content {
+      padding: 35px;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .section h2 {
+      margin-bottom: 12px;
+      font-size: 1.1rem;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 6px;
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .skill {
+      background: #e5e7eb;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+    }
+
+    @media(max-width: 1000px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="editor">
+      <h1>CV Builder Pro</h1>
+      <p class="subtitle">Crie currículos profissionais em tempo real.</p>
+
+      <div class="input-group">
+        <label>Nome Completo</label>
+        <input type="text" id="name" placeholder="Seu nome" />
+      </div>
+
+      <div class="input-group">
+        <label>Cargo</label>
+        <input type="text" id="role" placeholder="Desenvolvedor Front-End" />
+      </div>
+
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="email@gmail.com" />
+      </div>
+
+      <div class="input-group">
+        <label>Telefone</label>
+        <input type="text" id="phone" placeholder="(00) 00000-0000" />
+      </div>
+
+      <div class="input-group">
+        <label>Resumo Profissional</label>
+        <textarea id="about" placeholder="Fale sobre você..."></textarea>
+      </div>
+
+      <div class="input-group">
+        <label>Experiência</label>
+        <textarea id="experience" placeholder="Sua experiência..."></textarea>
+      </div>
+
+      <div class="input-group">
+        <label>Habilidades</label>
+        <input type="text" id="skills" placeholder="HTML, CSS, JavaScript" />
+      </div>
+
+      <div class="input-group">
+        <label>Cor Principal</label>
+        <select id="themeColor">
+          <option value="#6366f1">Roxo</option>
+          <option value="#0f172a">Preto</option>
+          <option value="#0ea5e9">Azul</option>
+          <option value="#16a34a">Verde</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Foto</label>
+        <input type="file" id="photo" accept="image/*" />
+      </div>
+
+      <div class="buttons">
+        <button class="download" onclick="downloadPDF()">Baixar PDF</button>
+        <button class="clear" onclick="clearFields()">Limpar</button>
+      </div>
+    </div>
+
+    <div class="preview">
+      <div class="cv" id="cv">
+
+        <div class="cv-header" id="cvHeader">
+          <img id="previewPhoto" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" />
+          <h1 id="previewName">Seu Nome</h1>
+          <p id="previewRole">Seu Cargo</p>
+        </div>
+
+        <div class="cv-content">
+
+          <div class="section">
+            <h2>Contato</h2>
+            <p id="previewEmail">email@gmail.com</p>
+            <p id="previewPhone">(00) 00000-0000</p>
+          </div>
+
+          <div class="section">
+            <h2>Resumo Profissional</h2>
+            <p id="previewAbout">
+              Escreva um resumo profissional moderno e objetivo.
+            </p>
+          </div>
+
+          <div class="section">
+            <h2>Experiência</h2>
+            <p id="previewExperience">
+              Suas experiências aparecerão aqui.
+            </p>
+          </div>
+
+          <div class="section">
+            <h2>Habilidades</h2>
+            <div class="skills" id="previewSkills">
+              <span class="skill">HTML</span>
+              <span class="skill">CSS</span>
+              <span class="skill">JavaScript</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const inputs = {
+      name: document.getElementById('name'),
+      role: document.getElementById('role'),
+      email: document.getElementById('email'),
+      phone: document.getElementById('phone'),
+      about: document.getElementById('about'),
+      experience: document.getElementById('experience'),
+      skills: document.getElementById('skills'),
+      themeColor: document.getElementById('themeColor')
+    };
+
+    function updateCV() {
+      document.getElementById('previewName').innerText = inputs.name.value || 'Seu Nome';
+      document.getElementById('previewRole').innerText = inputs.role.value || 'Seu Cargo';
+      document.getElementById('previewEmail').innerText = inputs.email.value || 'email@gmail.com';
+      document.getElementById('previewPhone').innerText = inputs.phone.value || '(00) 00000-0000';
+      document.getElementById('previewAbout').innerText = inputs.about.value || 'Escreva um resumo profissional moderno e objetivo.';
+      document.getElementById('previewExperience').innerText = inputs.experience.value || 'Suas experiências aparecerão aqui.';
+
+      document.getElementById('cvHeader').style.background = inputs.themeColor.value;
+
+      const skillsContainer = document.getElementById('previewSkills');
+      skillsContainer.innerHTML = '';
+
+      const skills = inputs.skills.value.split(',');
+
+      skills.forEach(skill => {
+        if(skill.trim() !== '') {
+          const span = document.createElement('span');
+          span.className = 'skill';
+          span.innerText = skill.trim();
+          skillsContainer.appendChild(span);
+        }
+      });
+    }
+
+    Object.values(inputs).forEach(input => {
+      input.addEventListener('input', updateCV);
+    });
+
+    document.getElementById('photo').addEventListener('change', function(e) {
+      const reader = new FileReader();
+
+      reader.onload = function() {
+        document.getElementById('previewPhoto').src = reader.result;
+      }
+
+      reader.readAsDataURL(e.target.files[0]);
+    });
+
+    async function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.setFont('helvetica');
+      doc.setFontSize(22);
+      doc.text(inputs.name.value || 'Seu Nome', 20, 25);
+
+      doc.setFontSize(14);
+      doc.text(inputs.role.value || 'Seu Cargo', 20, 35);
+
+      doc.setFontSize(12);
+      doc.text('Email: ' + (inputs.email.value || ''), 20, 50);
+      doc.text('Telefone: ' + (inputs.phone.value || ''), 20, 60);
+
+      doc.setFontSize(15);
+      doc.text('Resumo Profissional', 20, 80);
+
+      doc.setFontSize(11);
+      doc.text(doc.splitTextToSize(inputs.about.value || '', 170), 20, 90);
+
+      doc.setFontSize(15);
+      doc.text('Experiência', 20, 130);
+
+      doc.setFontSize(11);
+      doc.text(doc.splitTextToSize(inputs.experience.value || '', 170), 20, 140);
+
+      doc.setFontSize(15);
+      doc.text('Habilidades', 20, 190);
+
+      doc.setFontSize(11);
+      doc.text(inputs.skills.value || '', 20, 200);
+
+      doc.save('curriculo-profissional.pdf');
+    }
+
+    function clearFields() {
+      Object.values(inputs).forEach(input => {
+        input.value = '';
+      });
+
+      document.getElementById('previewPhoto').src = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+
+      updateCV();
+    }
+
+    updateCV();
+  </script>
+
+</body>
+</html>
