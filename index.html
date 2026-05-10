@@ -1,423 +1,436 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CV Builder Pro</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV Builder Premium</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
 
-    body {
-      background: #0f172a;
-      color: white;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 30px;
-    }
+body{
+background:#020617;
+color:white;
+padding:30px;
+}
 
-    .container {
-      width: 100%;
-      max-width: 1400px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
-    }
+.container{
+display:grid;
+grid-template-columns:420px 1fr;
+gap:30px;
+max-width:1500px;
+margin:auto;
+}
 
-    .editor,
-    .preview {
-      background: rgba(255,255,255,0.05);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-    }
+.panel{
+background:#0f172a;
+padding:25px;
+border-radius:20px;
+position:sticky;
+top:20px;
+height:max-content;
+border:1px solid rgba(255,255,255,.08);
+}
 
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 10px;
-    }
+.panel h1{
+font-size:2rem;
+margin-bottom:10px;
+}
 
-    .subtitle {
-      color: #94a3b8;
-      margin-bottom: 30px;
-    }
+.panel p{
+color:#94a3b8;
+margin-bottom:25px;
+}
 
-    .input-group {
-      margin-bottom: 18px;
-    }
+.input-group{
+margin-bottom:16px;
+}
 
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 0.95rem;
-    }
+label{
+display:block;
+margin-bottom:8px;
+font-size:.9rem;
+}
 
-    input,
-    textarea,
-    select {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.08);
-      color: white;
-      outline: none;
-    }
+input,textarea,select{
+width:100%;
+padding:14px;
+background:#1e293b;
+border:none;
+border-radius:12px;
+color:white;
+outline:none;
+}
 
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
+textarea{
+min-height:90px;
+resize:vertical;
+}
 
-    .buttons {
-      display: flex;
-      gap: 15px;
-      margin-top: 25px;
-    }
+button{
+width:100%;
+padding:16px;
+border:none;
+border-radius:14px;
+margin-top:12px;
+font-weight:bold;
+cursor:pointer;
+font-size:1rem;
+transition:.3s;
+}
 
-    button {
-      flex: 1;
-      padding: 15px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
-    }
+button:hover{
+transform:translateY(-3px);
+}
 
-    .download {
-      background: linear-gradient(135deg, #8b5cf6, #6366f1);
-      color: white;
-    }
+.btn-primary{
+background:linear-gradient(135deg,#7c3aed,#4f46e5);
+color:white;
+}
 
-    .clear {
-      background: #1e293b;
-      color: white;
-    }
+.btn-secondary{
+background:#1e293b;
+color:white;
+}
 
-    button:hover {
-      transform: translateY(-3px);
-    }
+.resume-area{
+display:flex;
+justify-content:center;
+}
 
-    .cv {
-      background: white;
-      color: #111827;
-      border-radius: 18px;
-      overflow: hidden;
-      min-height: 800px;
-    }
+.resume{
+width:850px;
+background:white;
+color:#111827;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 20px 50px rgba(0,0,0,.35);
+}
 
-    .cv-header {
-      padding: 35px;
-      color: white;
-      text-align: center;
-    }
+.top{
+padding:30px;
+display:flex;
+align-items:center;
+gap:25px;
+color:white;
+}
 
-    .cv-header img {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 15px;
-      border: 4px solid white;
-    }
+.photo{
+width:120px;
+height:120px;
+border-radius:50%;
+object-fit:cover;
+border:4px solid white;
+}
 
-    .cv-content {
-      padding: 35px;
-    }
+.top-info h2{
+font-size:2rem;
+margin-bottom:6px;
+}
 
-    .section {
-      margin-bottom: 30px;
-    }
+.top-info h3{
+font-size:1rem;
+font-weight:normal;
+opacity:.9;
+margin-bottom:14px;
+}
 
-    .section h2 {
-      margin-bottom: 12px;
-      font-size: 1.1rem;
-      border-bottom: 2px solid #e5e7eb;
-      padding-bottom: 6px;
-    }
+.contact{
+font-size:.9rem;
+line-height:1.8;
+}
 
-    .skills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+.content{
+padding:30px;
+}
 
-    .skill {
-      background: #e5e7eb;
-      padding: 8px 14px;
-      border-radius: 999px;
-      font-size: 0.85rem;
-    }
+.section{
+margin-bottom:24px;
+}
 
-    @media(max-width: 1000px) {
-      .container {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+.section h4{
+font-size:1rem;
+margin-bottom:10px;
+color:#111827;
+border-bottom:2px solid #e5e7eb;
+padding-bottom:6px;
+}
+
+.section p{
+font-size:.95rem;
+line-height:1.7;
+}
+
+.skills{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+}
+
+.skill{
+padding:8px 14px;
+background:#e5e7eb;
+border-radius:999px;
+font-size:.85rem;
+}
+
+.grid-2{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:25px;
+}
+
+@media(max-width:1200px){
+.container{
+grid-template-columns:1fr;
+}
+
+.resume{
+width:100%;
+}
+}
+</style>
 </head>
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <div class="editor">
-      <h1>CV Builder Pro</h1>
-      <p class="subtitle">Crie currículos profissionais em tempo real.</p>
+<div class="panel">
+<h1>CV Builder Premium</h1>
+<p>Ferramenta profissional para criação de currículos modernos.</p>
 
-      <div class="input-group">
-        <label>Nome Completo</label>
-        <input type="text" id="name" placeholder="Seu nome" />
-      </div>
+<div class="input-group">
+<label>Nome Completo</label>
+<input type="text" id="name" placeholder="Seu nome completo">
+</div>
 
-      <div class="input-group">
-        <label>Cargo</label>
-        <input type="text" id="role" placeholder="Desenvolvedor Front-End" />
-      </div>
+<div class="input-group">
+<label>Cargo</label>
+<input type="text" id="role" placeholder="Ex: Desenvolvedor Front-End">
+</div>
 
-      <div class="input-group">
-        <label>Email</label>
-        <input type="email" id="email" placeholder="email@gmail.com" />
-      </div>
+<div class="input-group">
+<label>Email</label>
+<input type="email" id="email">
+</div>
 
-      <div class="input-group">
-        <label>LinkedIn</label>
-        <input type="text" id="linkedin" placeholder="linkedin.com/in/seuperfil" />
-      </div>
+<div class="input-group">
+<label>Telefone</label>
+<input type="text" id="phone">
+</div>
 
-      <div class="input-group">
-        <label>GitHub</label>
-        <input type="text" id="github" placeholder="github.com/seuusuario" />
-      </div>
+<div class="input-group">
+<label>LinkedIn</label>
+<input type="text" id="linkedin">
+</div>
 
-      <div class="input-group">
-        <label>Telefone</label>
-        <input type="text" id="phone" placeholder="(00) 00000-0000" />
-      </div>
+<div class="input-group">
+<label>Cidade</label>
+<input type="text" id="city" placeholder="Arcoverde - PE">
+</div>
 
-      <div class="input-group">
-        <label>Resumo Profissional</label>
-        <textarea id="about" placeholder="Fale sobre você..."></textarea>
-      </div>
+<div class="input-group">
+<label>Objetivo Profissional</label>
+<textarea id="objective"></textarea>
+</div>
 
-      <div class="input-group">
-        <label>Experiência</label>
-        <textarea id="experience" placeholder="Sua experiência..."></textarea>
-      </div>
+<div class="input-group">
+<label>Formação Acadêmica</label>
+<textarea id="education"></textarea>
+</div>
 
-      <div class="input-group">
-        <label>Habilidades</label>
-        <input type="text" id="skills" placeholder="HTML, CSS, JavaScript" />
-      </div>
+<div class="input-group">
+<label>Cursos Complementares</label>
+<textarea id="courses"></textarea>
+</div>
 
-      <div class="input-group">
-        <label>Modelo do Currículo</label>
-        <select id="template">
-          <option value="modern">Moderno</option>
-          <option value="minimal">Minimalista</option>
-          <option value="corporate">Corporativo</option>
-        </select>
-      </div>
+<div class="input-group">
+<label>Experiência Profissional</label>
+<textarea id="experience"></textarea>
+</div>
 
-      <div class="input-group">
-        <label>Cor Principal</label>
-        <select id="themeColor">
-          <option value="#6366f1">Roxo</option>
-          <option value="#0f172a">Preto</option>
-          <option value="#0ea5e9">Azul</option>
-          <option value="#16a34a">Verde</option>
-          <option value="#ef4444">Vermelho</option>
-          <option value="#f59e0b">Laranja</option>
-          <option value="#ec4899">Rosa</option>
-        </select>
-      </div>
+<div class="input-group">
+<label>Habilidades</label>
+<input type="text" id="skills" placeholder="HTML, CSS, Comunicação">
+</div>
 
-      <div class="input-group">
-        <label>Foto</label>
-        <input type="file" id="photo" accept="image/*" />
-      </div>
+<div class="input-group">
+<label>Informações Adicionais</label>
+<textarea id="extra"></textarea>
+</div>
 
-      <div class="buttons">
-        <button class="download" onclick="downloadPDF()">Baixar PDF</button>
-        <button class="clear" onclick="clearFields()">Limpar</button>
-      </div>
-    </div>
+<div class="input-group">
+<label>Modelo</label>
+<select id="template">
+<option value="#4f46e5">Roxo Premium</option>
+<option value="#0f172a">Corporativo Escuro</option>
+<option value="#0ea5e9">Azul Moderno</option>
+<option value="#16a34a">Verde Profissional</option>
+<option value="#dc2626">Vermelho Elegante</option>
+</select>
+</div>
 
-    <div class="preview">
-      <div class="cv" id="cv">
+<div class="input-group">
+<label>Foto</label>
+<input type="file" id="photo" accept="image/*">
+</div>
 
-        <div class="cv-header" id="cvHeader">
-          <img id="previewPhoto" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" />
-          <h1 id="previewName">Seu Nome</h1>
-          <p id="previewRole">Seu Cargo</p>
-        </div>
+<button class="btn-primary" onclick="downloadPDF()">Baixar Currículo PDF</button>
+<button class="btn-secondary" onclick="clearFields()">Limpar Campos</button>
 
-        <div class="cv-content">
+</div>
 
-          <div class="section">
-            <h2>Contato</h2>
-            <p id="previewEmail">email@gmail.com</p>
-            <p id="previewPhone">(00) 00000-0000</p>
-            <p id="previewLinkedin">linkedin.com/in/seuperfil</p>
-            <p id="previewGithub">github.com/seuusuario</p>
-          </div>
+<div class="resume-area">
+<div class="resume" id="resume">
 
-          <div class="section">
-            <h2>Resumo Profissional</h2>
-            <p id="previewAbout">
-              Escreva um resumo profissional moderno e objetivo.
-            </p>
-          </div>
+<div class="top" id="top">
+<img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="photo" id="previewPhoto">
 
-          <div class="section">
-            <h2>Experiência</h2>
-            <p id="previewExperience">
-              Suas experiências aparecerão aqui.
-            </p>
-          </div>
+<div class="top-info">
+<h2 id="previewName">CAUÃ VITOR SOUZA LEITE</h2>
+<h3 id="previewRole">Desenvolvedor Front-End</h3>
 
-          <div class="section">
-            <h2>Habilidades</h2>
-            <div class="skills" id="previewSkills">
-              <span class="skill">HTML</span>
-              <span class="skill">CSS</span>
-              <span class="skill">JavaScript</span>
-            </div>
-          </div>
+<div class="contact">
+<div id="previewCity">Arcoverde - PE</div>
+<div id="previewPhone">(87) 99999-9999</div>
+<div id="previewEmail">email@gmail.com</div>
+<div id="previewLinkedin">linkedin.com/in/seuperfil</div>
+</div>
+</div>
+</div>
 
-        </div>
-      </div>
-    </div>
+<div class="content">
 
-  </div>
+<div class="section">
+<h4>OBJETIVO PROFISSIONAL</h4>
+<p id="previewObjective">
+Atuar profissionalmente contribuindo com dedicação, aprendizado contínuo e foco em resultados.
+</p>
+</div>
 
-  <script>
-    const inputs = {
-      linkedin: document.getElementById('linkedin'),
-      github: document.getElementById('github'),
-      name: document.getElementById('name'),
-      role: document.getElementById('role'),
-      email: document.getElementById('email'),
-      phone: document.getElementById('phone'),
-      about: document.getElementById('about'),
-      experience: document.getElementById('experience'),
-      skills: document.getElementById('skills'),
-      themeColor: document.getElementById('themeColor')
-    };
+<div class="grid-2">
+<div>
+<div class="section">
+<h4>FORMAÇÃO ACADÊMICA</h4>
+<p id="previewEducation"></p>
+</div>
 
-    function updateCV() {
-      document.getElementById('previewName').innerText = inputs.name.value || 'Seu Nome';
-      document.getElementById('previewRole').innerText = inputs.role.value || 'Seu Cargo';
-      document.getElementById('previewEmail').innerText = inputs.email.value || 'email@gmail.com';
-      document.getElementById('previewPhone').innerText = inputs.phone.value || '(00) 00000-0000';
-      document.getElementById('previewLinkedin').innerText = inputs.linkedin.value || 'linkedin.com/in/seuperfil';
-      document.getElementById('previewGithub').innerText = inputs.github.value || 'github.com/seuusuario';
-      document.getElementById('previewAbout').innerText = inputs.about.value || 'Escreva um resumo profissional moderno e objetivo.';
-      document.getElementById('previewExperience').innerText = inputs.experience.value || 'Suas experiências aparecerão aqui.';
+<div class="section">
+<h4>CURSOS COMPLEMENTARES</h4>
+<p id="previewCourses"></p>
+</div>
+</div>
 
-      document.getElementById('cvHeader').style.background = inputs.themeColor.value;
+<div>
+<div class="section">
+<h4>EXPERIÊNCIA PROFISSIONAL</h4>
+<p id="previewExperience"></p>
+</div>
 
-      const cv = document.getElementById('cv');
+<div class="section">
+<h4>INFORMAÇÕES ADICIONAIS</h4>
+<p id="previewExtra"></p>
+</div>
+</div>
+</div>
 
-      if(inputs.template.value === 'minimal') {
-        cv.style.borderRadius = '0px';
-        cv.style.boxShadow = 'none';
-      } else if(inputs.template.value === 'corporate') {
-        cv.style.borderRadius = '8px';
-        cv.style.boxShadow = '0 0 30px rgba(0,0,0,0.1)';
-      } else {
-        cv.style.borderRadius = '18px';
-        cv.style.boxShadow = '0 10px 30px rgba(0,0,0,0.2)';
-      }
+<div class="section">
+<h4>HABILIDADES</h4>
+<div class="skills" id="previewSkills"></div>
+</div>
 
-      const skillsContainer = document.getElementById('previewSkills');
-      skillsContainer.innerHTML = '';
+</div>
+</div>
+</div>
 
-      const skills = inputs.skills.value.split(',');
+</div>
 
-      skills.forEach(skill => {
-        if(skill.trim() !== '') {
-          const span = document.createElement('span');
-          span.className = 'skill';
-          span.innerText = skill.trim();
-          skillsContainer.appendChild(span);
-        }
-      });
-    }
+<script>
+const fields={
+name:document.getElementById('name'),
+role:document.getElementById('role'),
+email:document.getElementById('email'),
+phone:document.getElementById('phone'),
+linkedin:document.getElementById('linkedin'),
+city:document.getElementById('city'),
+objective:document.getElementById('objective'),
+education:document.getElementById('education'),
+courses:document.getElementById('courses'),
+experience:document.getElementById('experience'),
+skills:document.getElementById('skills'),
+extra:document.getElementById('extra'),
+template:document.getElementById('template')
+};
 
-    Object.values(inputs).forEach(input => {
-      input.addEventListener('input', updateCV);
-    });
+function updateResume(){
+document.getElementById('previewName').innerText=fields.name.value||'CAUÃ VITOR SOUZA LEITE';
+document.getElementById('previewRole').innerText=fields.role.value||'Desenvolvedor Front-End';
+document.getElementById('previewEmail').innerText=fields.email.value||'email@gmail.com';
+document.getElementById('previewPhone').innerText=fields.phone.value||'(87) 99999-9999';
+document.getElementById('previewLinkedin').innerText=fields.linkedin.value||'linkedin.com/in/seuperfil';
+document.getElementById('previewCity').innerText=fields.city.value||'Arcoverde - PE';
+document.getElementById('previewObjective').innerText=fields.objective.value;
+document.getElementById('previewEducation').innerText=fields.education.value;
+document.getElementById('previewCourses').innerText=fields.courses.value;
+document.getElementById('previewExperience').innerText=fields.experience.value;
+document.getElementById('previewExtra').innerText=fields.extra.value;
 
-    document.getElementById('photo').addEventListener('change', function(e) {
-      const reader = new FileReader();
+document.getElementById('top').style.background=fields.template.value;
 
-      reader.onload = function() {
-        document.getElementById('previewPhoto').src = reader.result;
-      }
+const skillsContainer=document.getElementById('previewSkills');
+skillsContainer.innerHTML='';
 
-      reader.readAsDataURL(e.target.files[0]);
-    });
+fields.skills.value.split(',').forEach(skill=>{
+if(skill.trim()!==''){
+const div=document.createElement('div');
+div.className='skill';
+div.innerText=skill.trim();
+skillsContainer.appendChild(div);
+}
+});
+}
 
-    async function downloadPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
+Object.values(fields).forEach(field=>{
+field.addEventListener('input',updateResume);
+});
 
-      doc.setFont('helvetica');
-      doc.setFontSize(22);
-      doc.text(inputs.name.value || 'Seu Nome', 20, 25);
+document.getElementById('photo').addEventListener('change',function(e){
+const reader=new FileReader();
+reader.onload=function(){
+document.getElementById('previewPhoto').src=reader.result;
+}
+reader.readAsDataURL(e.target.files[0]);
+});
 
-      doc.setFontSize(14);
-      doc.text(inputs.role.value || 'Seu Cargo', 20, 35);
+async function downloadPDF(){
+const resume=document.getElementById('resume');
 
-      doc.setFontSize(12);
-      doc.text('Email: ' + (inputs.email.value || ''), 20, 50);
-      doc.text('Telefone: ' + (inputs.phone.value || ''), 20, 60);
-      doc.text('LinkedIn: ' + (inputs.linkedin.value || ''), 20, 70);
-      doc.text('GitHub: ' + (inputs.github.value || ''), 20, 80);
+const canvas=await html2canvas(resume,{scale:2});
+const imgData=canvas.toDataURL('image/png');
 
-      doc.setFontSize(15);
-      doc.text('Resumo Profissional', 20, 100);
+const {jsPDF}=window.jspdf;
+const pdf=new jsPDF('p','mm','a4');
 
-      doc.setFontSize(11);
-      doc.text(doc.splitTextToSize(inputs.about.value || '', 170), 20, 110);
+const pdfWidth=210;
+const pdfHeight=(canvas.height*pdfWidth)/canvas.width;
 
-      doc.setFontSize(15);
-      doc.text('Experiência', 20, 150);
+pdf.addImage(imgData,'PNG',0,0,pdfWidth,pdfHeight);
+pdf.save('curriculo-premium.pdf');
+}
 
-      doc.setFontSize(11);
-      doc.text(doc.splitTextToSize(inputs.experience.value || '', 170), 20, 160);
+function clearFields(){
+Object.values(fields).forEach(field=>field.value='');
+updateResume();
+}
 
-      doc.setFontSize(15);
-      doc.text('Habilidades', 20, 210);
-
-      doc.setFontSize(11);
-      doc.text(inputs.skills.value || '', 20, 220);
-
-      doc.save('curriculo-profissional.pdf');
-    }
-
-    function clearFields() {
-      Object.values(inputs).forEach(input => {
-        input.value = '';
-      });
-
-      document.getElementById('previewPhoto').src = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
-
-      updateCV();
-    }
-
-    updateCV();
-  </script>
+updateResume();
+</script>
 
 </body>
 </html>
